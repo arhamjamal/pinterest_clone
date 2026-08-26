@@ -25,14 +25,12 @@ function LoginForm() {
     try {
       await login(formData);
     } catch {
-      // Error is already stored in useAuth.
+      // Error is already handled by useAuth.
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
-
+    <form onSubmit={handleSubmit} className="space-y-5">
       <AuthInput
         label="Email"
         type="email"
@@ -51,10 +49,18 @@ function LoginForm() {
         placeholder="Enter your password"
       />
 
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="rounded-xl bg-[#F3A683]/15 px-4 py-3 text-sm text-[#C83F50]">
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-full bg-[#D94A5A] px-5 py-3.5 font-semibold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#C83F50] hover:shadow-md active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {loading ? "Logging in..." : "Log in"}
       </button>
     </form>
   );
