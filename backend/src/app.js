@@ -2,6 +2,7 @@
 const express = require('express')
 const cors = require("cors");
 const app = express()
+const authRoutes = require("./features/auth/auth.routes");
 
 //middleware
 app.use(
@@ -13,14 +14,19 @@ app.use(
 
 app.use(express.json())
 
-//apis
-app.get("/api/test", (req, res) => {   //test
+
+//APIs
+
+app.get("/api/test", (req, res) => {   //!TEST
     res.json({
         success: true,
         message: "Frontend successfully connected to backend!"
     });
 });
 
+//auth routes
+
+app.use("/api/auth", authRoutes);
 
 
 module.exports = app;
