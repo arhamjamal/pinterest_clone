@@ -75,9 +75,80 @@ const login = async (req, res) => {
     }
 };
 
+//GET CURRENT USER
+const getMe = async (req, res) => {
+    try {
+        const accessToken = req.cookies.access_token;
 
+        if (!accessToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Not authenticated"
+            });
+        }
+
+        const user = await authService.getCurrentUser(accessToken);
+
+        res.status(200).json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        console.error("Get current user error:", error);
+
+        res.status(401).json({
+            success: false,
+            message: "Invalid or expired session"
+        });
+    }
+};
+
+//Refresh session for expired token
+const refresh = async (req, res) => {
+    try {
+        const refreshToken = req.cookies.refresh_token;
+
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Refresh token missing"
+            });
+        }
+
+        const data = await authService.refreshSession(refreshToken);
+
+        res.cookie("access_token", data.session.access_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: data.session.expires_in * 1000
+        });
+
+        res.cookie("refresh_token", data.session.refresh_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Session refreshed"
+        });
+
+    } catch (error) {
+        console.error("Refresh error:", error);
+
+        res.status(401).json({
+            success: false,
+            message: "Unable to refresh session"
+        });
+    }
+};
 
 module.exports = {
     register,
-    login
+    login,
+    getMe,
+    refresh
 };

@@ -13,7 +13,7 @@ app.use(
     })
 );
 
-app.use(cookieParser())   //the backend receives the Supabase session and puts the tokens into cookies.
+app.use(cookieParser())   //the backend receives the Supabase session and puts the tokens(refresh & access) into cookies.
 app.use(express.json())
 
 

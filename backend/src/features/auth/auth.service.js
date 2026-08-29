@@ -30,9 +30,34 @@ const loginUser = async (email, password) => {
     return data;
 };
 
+//Authenticate user-Get User  -------""Backend, tell me who is currently logged in."
 
+const getCurrentUser = async (accessToken) => {
+    const { data, error } = await supabase.auth.getUser(accessToken);
+
+    if (error) {
+        throw error;
+    }
+
+    return data.user;
+};
+
+//REfresh Session if access token expires
+const refreshSession = async (refreshToken) => {
+    const { data, error } = await supabase.auth.refreshSession({
+        refresh_token: refreshToken
+    });
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+};
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getCurrentUser,
+    refreshSession
 };
