@@ -2,6 +2,7 @@
 const express = require('express')
 const cors = require("cors");
 const app = express()
+const cookieParser = require("cookie-parser");
 const authRoutes = require("./features/auth/auth.routes");
 
 //middleware
@@ -12,6 +13,7 @@ app.use(
     })
 );
 
+app.use(cookieParser())   //the backend receives the Supabase session and puts the tokens into cookies.
 app.use(express.json())
 
 
