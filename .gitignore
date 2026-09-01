@@ -4,3 +4,4 @@ dist/
 tests/
 !.env.example  
 flow/
+todo.txt
