@@ -5,3 +5,7 @@ tests/
 !.env.example  
 flow/
 todo.txt
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes

@@ -1,5 +1,5 @@
 //communicates with supabase
-
+const { createClient } = require("@supabase/supabase-js"); //for avoding shared client for refresh session
 const { supabase, supabaseAdmin } = require("../../config/supabase");
 
 //user created and there i also other option lke supabase.auth.signUp but it creates rate limit
@@ -42,9 +42,20 @@ const getCurrentUser = async (accessToken) => {
     return data.user;
 };
 
-//REfresh Session if access token expires
+//Refresh Session if access token expires
 const refreshSession = async (refreshToken) => {
-    const { data, error } = await supabase.auth.refreshSession({
+    const refreshClient = createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_PUBLISHABLE_KEY,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    );
+
+    const { data, error } = await refreshClient.auth.refreshSession({
         refresh_token: refreshToken
     });
 
@@ -55,9 +66,19 @@ const refreshSession = async (refreshToken) => {
     return data;
 };
 
+//logout user---!NOT USED PRIMARIRLY IN CONTROLLER
+// const logoutUser = async () => {
+//     const { error } = await supabase.auth.signOut();
+
+//     if (error) {
+//         throw error;
+//     }
+// };
+
 module.exports = {
     registerUser,
     loginUser,
     getCurrentUser,
-    refreshSession
+    refreshSession,
+    // logoutUser
 };
